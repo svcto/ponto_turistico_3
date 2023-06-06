@@ -112,31 +112,13 @@ class _ListaTurismoPageState extends State<ListaTurismoPage> {
         final turismo = _turismos[index];
         return PopupMenuButton<String>(
           child: ListTile(
-            leading: Checkbox(
-              value: turismo.finalizada,
-              onChanged: (bool? checked) {
-                setState(() {
-                  turismo.finalizada = checked == true;
-                });
-                _dao.salvar(turismo);
-              },
-            ),
             title: Text(
-              '${turismo.id} - ${turismo.nome}',
-              style: TextStyle(
-                decoration:
-                turismo.finalizada ? TextDecoration.lineThrough : null,
-                color: turismo.finalizada ? Colors.grey : null,
-              ),
+              '${turismo.id} - ${turismo.nome}'
             ),
             subtitle: Text(turismo.dataCadastro == null
                 ? 'Tarefa sem data de inserção'
                 : 'Data Cadastro - ${turismo.dataCadastroFormatado}',
-              style: TextStyle(
-                decoration:
-                turismo.finalizada ? TextDecoration.lineThrough : null,
-                color: turismo.finalizada ? Colors.grey : null,
-              ),
+
             ),
           ),
           itemBuilder: (_) => _criarItensMenuPopup(),
@@ -241,7 +223,7 @@ class _ListaTurismoPageState extends State<ListaTurismoPage> {
       builder: (_) =>
           AlertDialog(
             title: Row(
-              children: [
+              children: const [
                 Icon(Icons.warning),
                 Padding(
                   padding: EdgeInsets.only(left: 10),
@@ -249,14 +231,14 @@ class _ListaTurismoPageState extends State<ListaTurismoPage> {
                 ),
               ],
             ),
-            content: Text('Esse registro será removido permanentemente.'),
+            content: const Text('Esse registro será removido permanentemente.'),
             actions: [
               TextButton(
-                child: Text('Cancelar'),
+                child: const Text('Cancelar'),
                 onPressed: () => Navigator.pop(context),
               ),
               TextButton(
-                child: Text('OK'),
+                child: const Text('OK'),
                 onPressed: () {
                   Navigator.pop(context);
                   if (turismo.id == null) {
@@ -288,7 +270,7 @@ class _ListaTurismoPageState extends State<ListaTurismoPage> {
         MaterialPageRoute(
           builder: (_) =>
               DetalhesPage(
-                pontoturistico: turismo,
+                pontoTuristico: turismo,
               ),
         ));
   }

@@ -34,8 +34,7 @@ class DatabaseProvider {
         ${PontoTuristico.campoDiferenciais} TEXT,
         ${PontoTuristico.campoNome} TEXT,
         ${PontoTuristico.campoLatitude} TEXT,
-        ${PontoTuristico.campoLongitude} TEXT,
-        ${PontoTuristico.campoFinalizada} INTEGER NOT NULL DEFAULT 0
+        ${PontoTuristico.campoLongitude} TEXT DEFAULT 0
       );
     ''');
   }

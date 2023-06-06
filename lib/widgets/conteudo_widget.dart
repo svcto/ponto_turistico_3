@@ -125,17 +125,28 @@ class ConteudoWidgetState extends State<ConteudoWidget> {
 
 
   Future<bool> _permissoesOk() async {
-    LocationPermission permissao = await Geolocator.checkPermission();
-    if (permissao == LocationPermission.denied) {
-      permissao = await Geolocator.requestPermission();
+    try {
+      LocationPermission permissao = await Geolocator.checkPermission();
       if (permissao == LocationPermission.denied) {
-        _mostrarMensagem(
-            'Não será possível utilizar o '
-                'recurso por falta de permissão');
+        permissao = await Geolocator.requestPermission();
+        if (permissao == LocationPermission.denied) {
+          _mostrarMensagem(
+              'Não será possível utilizar o '
+                  'recurso por falta de permissão');
+          return false;
+        }
+      }
+      if (permissao == LocationPermission.deniedForever) {
+        await _mostrarMensagemDialog(
+            'Para utilizar esse recurso,'
+                ' você deverá acessar as configurações '
+                ' do app e permitir a utilização'
+                ' do serviço de localização!!');
+        Geolocator.openAppSettings();
         return false;
       }
-    }
-    if (permissao == LocationPermission.deniedForever) {
+      return true;
+    }catch (e) {
       await _mostrarMensagemDialog(
           'Para utilizar esse recurso,'
               ' você deverá acessar as configurações '
@@ -144,7 +155,6 @@ class ConteudoWidgetState extends State<ConteudoWidget> {
       Geolocator.openAppSettings();
       return false;
     }
-    return true;
   }
 
   void _obterLocalizacaoAtual() async {

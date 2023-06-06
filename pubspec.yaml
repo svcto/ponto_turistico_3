@@ -40,7 +40,7 @@ dependencies:
   sqflite: ^2.2.6
   maps_launcher: ^2.2.0
   geolocator: ^9.0.2
-  google_maps_flutter: ^2.2.6
+  google_maps_flutter: 2.0.4
 
 dev_dependencies:
   flutter_test:

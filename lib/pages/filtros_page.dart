@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -106,7 +105,7 @@ class _FiltrosPageState extends State<FiltrosPage> {
   Widget _criarBody() {
     return ListView(
       children: [
-        Padding(
+        const Padding(
           padding: EdgeInsets.only(left: 10, top: 10),
           child: Text('Campos para ordenação'),
         ),
@@ -121,7 +120,7 @@ class _FiltrosPageState extends State<FiltrosPage> {
               Text(camposParaOrdenacao[campo]!),
             ],
           ),
-        Divider(),
+        const Divider(),
         Row(
           children: [
             Checkbox(
@@ -133,7 +132,7 @@ class _FiltrosPageState extends State<FiltrosPage> {
         ),
         Divider(),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: TextField(
             decoration: const InputDecoration(
               labelText: 'Informe a descricao de busca',
@@ -145,7 +144,7 @@ class _FiltrosPageState extends State<FiltrosPage> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: TextField(
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Informe os diferenciais da busca',
             ),
             controller: diferenciaisController,
@@ -153,9 +152,9 @@ class _FiltrosPageState extends State<FiltrosPage> {
           ),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: TextField(
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Informe o nome de busca',
             ),
             controller: nomeController,
@@ -169,12 +168,12 @@ class _FiltrosPageState extends State<FiltrosPage> {
   @override
   Widget build(BuildContext context){
     return WillPopScope(
+      onWillPop: _onVoltarClick,
       child: Scaffold(
-        appBar: AppBar(title: Text('Filtros e Ordenação'),
+        appBar: AppBar(title: const Text('Filtros e Ordenação'),
         ),
         body: _criarBody(),
       ),
-      onWillPop: _onVoltarClick,
     );
   }
 
