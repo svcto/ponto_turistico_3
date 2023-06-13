@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:maps_launcher/maps_launcher.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:ponto_turistico_3/model/cep.dart';
+import 'package:ponto_turistico_3/service/cep_service.dart';
 
 import '../model/ponto_turistico.dart';
 import '../pages/mapa_page.dart';
@@ -24,6 +27,13 @@ class ConteudoWidgetState extends State<ConteudoWidget> {
   String get _latitude => _localizacaoAtual?.latitude.toString() ?? '';
 
   String get _longitude => _localizacaoAtual?.longitude.toString() ?? '';
+  bool loading = false;
+  CepService cepService = CepService();
+  Endereco? endereco;
+  final cepFormater = MaskTextInputFormatter(
+      mask: '#####-###',
+      filter: {'#' : RegExp(r'[0-9]')}
+  );
 
   final _formKey = GlobalKey<FormState>();
   final _nomeController = TextEditingController();
@@ -32,6 +42,7 @@ class ConteudoWidgetState extends State<ConteudoWidget> {
   final _dataController = TextEditingController();
   final _longitudeController = TextEditingController();
   final _latitudeController = TextEditingController();
+  final _cepController = TextEditingController();
 
   @override
   void initState() {
@@ -43,7 +54,7 @@ class ConteudoWidgetState extends State<ConteudoWidget> {
       _dataController.text = widget.turismoAtual!.dataCadastroFormatado;
       _longitudeController.text = widget.turismoAtual!.longitude;
       _latitudeController.text = widget.turismoAtual!.latitude;
-
+      _cepController.text = widget.turismoAtual!.cep;
       // horaControllerController.text =formattedDate;
 
     }
@@ -87,6 +98,32 @@ class ConteudoWidgetState extends State<ConteudoWidget> {
                 return null;
               },
             ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: TextFormField(
+                controller: _cepController,
+                decoration: InputDecoration(
+                  labelText: 'CEP',
+                  suffixIcon: loading ? const Padding(
+                    padding: EdgeInsets.all(10),
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ) : IconButton(
+                    onPressed: _findCep,
+                    icon: const Icon(Icons.search),
+                  ),
+                ),
+                inputFormatters: [cepFormater],
+                validator: (String? value){
+                  if(value == null || value.isEmpty ||
+                      !cepFormater.isFill()){
+                    return 'Informe um cep válido!';
+                  }
+                  return null;
+                },
+              ),
+            ),
+            Container(height: 10),
+            ..._buildWidgets(),
             ElevatedButton(
               onPressed: _obterLocalizacaoAtual,
               child: Text('Obter Localização'),
@@ -120,7 +157,8 @@ class ConteudoWidgetState extends State<ConteudoWidget> {
           diferenciais: _diferenciaisController.text,
           latitude: _latitude,
           longitude: _longitude,
-          dataCadastro: DateTime.now()
+          dataCadastro: DateTime.now(),
+          cep: _cepController.text
       );
 
 
@@ -188,6 +226,37 @@ class ConteudoWidgetState extends State<ConteudoWidget> {
   void _mostrarMensagem(String mensagem) {
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(mensagem)));
+  }
+
+  Future<void> _findCep() async {
+    // if(_formKey.currentState == null || !_formKey.currentState!.validate()){
+    //   return;
+    // }
+    setState(() {
+      loading = true;
+    });
+    try{
+      endereco = await cepService.findCepAsObject(cepFormater.getUnmaskedText());
+    }catch(e){
+      debugPrint(e.toString());
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Ocorreu um erro. Tente novamente. \nErro: ${e.toString()}')
+      ));
+    }
+    setState(() {
+      loading = false;
+    });
+  }
+  List<Widget> _buildWidgets(){
+    final List<Widget> widgets = [];
+    if(endereco != null){
+      final map = endereco!.toJson();
+      for(final key in map.keys){
+        widgets.add(Text('$key:  ${map[key]}'));
+
+      }
+    }
+    return widgets;
   }
 
   Future<void> _mostrarMensagemDialog(String mensagem) async {

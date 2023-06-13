@@ -2,11 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ponto_turistico_3/pages/detalhes_page.dart';
 import 'package:ponto_turistico_3/pages/filtros_page.dart';
-import 'package:ponto_turistico_3/pages/filtros_page.dart';
-import 'package:ponto_turistico_3/pages/filtros_page.dart';
-import 'package:ponto_turistico_3/pages/filtros_page.dart';
-import 'package:ponto_turistico_3/pages/filtros_page.dart';
-import 'package:ponto_turistico_3/pages/filtros_page.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../dao/turismo_dao.dart';

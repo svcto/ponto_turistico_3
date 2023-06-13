@@ -66,6 +66,12 @@ class _DetalhesPageState extends State<DetalhesPage> {
         ),
         Row(
           children: [
+            const Campo(descricao: 'Cep: '),
+            Valor(valor: widget.pontoTuristico.cep),
+          ],
+        ),
+        Row(
+          children: [
             const Campo(descricao: 'Localização: '),
             Valor(
               valor: 'Latitude: ${widget.pontoTuristico.latitude}  \n'

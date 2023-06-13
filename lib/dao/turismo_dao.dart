@@ -44,7 +44,8 @@ class TurismoDao {
         PontoTuristico.campoData,
         PontoTuristico.campoNome,
         PontoTuristico.campoLatitude,
-        PontoTuristico.campoLongitude
+        PontoTuristico.campoLongitude,
+        PontoTuristico.campoCep
       ],
       where: where,
       orderBy: orderBy,

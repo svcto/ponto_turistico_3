@@ -4,7 +4,7 @@ import '../model/ponto_turistico.dart';
 
 class DatabaseProvider {
   static const _dbName = 'turismo.db';
-  static const _dbVersion = 1;
+  static const _dbVersion = 4;
 
   DatabaseProvider._init();
 
@@ -40,7 +40,20 @@ class DatabaseProvider {
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-
+    switch (oldVersion) {
+      case 3:
+        await db.execute(''' 
+          ALTER TABLE ${PontoTuristico.nomeTabela}
+          ADD COLUMN  ${PontoTuristico.campoCep} TEXT DEFAULT '';
+        ''');
+        break;
+      case 4:
+        await db.execute(''' 
+          UPDATE ${PontoTuristico.nomeTabela}
+          SET  ${PontoTuristico.campoCep} =  ''
+           WHERE ${PontoTuristico.campoCep} IS NULL;
+        ''');
+    }
   }
 
   Future<void> close() async {
